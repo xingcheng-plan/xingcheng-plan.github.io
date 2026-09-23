@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   reporter: [['list']],
   use: {
-    baseURL: 'http://127.0.0.1:4321',
+    baseURL: 'http://127.0.0.1:4322',
     channel: 'chrome',
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
@@ -14,9 +14,9 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 5'] } },
   ],
   webServer: {
-    command: 'npm run dev -- --host 127.0.0.1',
-    url: 'http://127.0.0.1:4321/',
-    reuseExistingServer: true,
+    command: 'npm run build && npm run preview',
+    url: 'http://127.0.0.1:4322/',
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });

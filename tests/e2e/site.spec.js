@@ -22,6 +22,9 @@ test('the meeting has a schedule and playable media', async ({ page }) => {
   await recording.evaluate((video) => { video.currentTime = 600; });
   await expect.poll(() => recording.evaluate((video) => video.currentTime), { timeout: 20_000 }).toBeGreaterThan(599);
   await expect.poll(() => recording.evaluate((video) => video.readyState), { timeout: 20_000 }).toBeGreaterThan(1);
+  const shortClip = page.locator('video[aria-label="现场短镜头"]');
+  await shortClip.evaluate((video) => video.load());
+  await expect.poll(() => shortClip.evaluate((video) => video.readyState), { timeout: 10_000 }).toBeGreaterThan(1);
 });
 
 test('mobile pages fit the screen without horizontal scrolling', async ({ page }, testInfo) => {
