@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const events = (await getCollection('events')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="活动记录" description="浏览星程计划的活动记录、见面会日程、照片与现场影像。">
+  <section class="page-hero"><div class="container"><span class="section-kicker">MOMENTS & EVENTS</span><h1>活动记录</h1><p>把一起学习、交流和实践的时刻留在这里。</p></div></section>
+  <section class="section-pad"><div class="container"><div class="section-heading"><div><span class="section-kicker">按时间浏览</span><h2>近期活动</h2></div><span class="event-count">{String(events.length).padStart(2, '0')} 项记录</span></div><div class="event-list">{events.map((event) => <a class="event-card" href={`/events/${event.id}/`}><img src={event.data.hero} alt={event.data.heroAlt} loading="lazy" /><div class="event-card-copy"><time datetime={event.data.date.toISOString().slice(0, 10)}>{event.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}</time><h3>{event.data.title}</h3><p>{event.data.summary}</p><span>查看活动详情与影像 <span aria-hidden="true">→</span></span></div></a>)}</div></div></section>
+</BaseLayout>

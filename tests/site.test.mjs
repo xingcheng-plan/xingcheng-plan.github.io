@@ -23,5 +23,5 @@ test('the meeting page includes its schedule and a playable short clip', async (
   const html = await page('events/2026-09-13-meeting/index.html');
   assert.match(html, /暑期打榜颁奖/);
   assert.match(html, /src="\/videos\/meeting-moment.mp4"/);
-  assert.match(html, /录像整理中/);
+  assert.match(html, /\/stream\/recording-one\/index.m3u8/);
 });

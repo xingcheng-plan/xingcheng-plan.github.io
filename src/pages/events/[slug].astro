@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { meetingAgenda, meetingVideos, formatAgendaMinute } from '../../data/meeting.mjs';
+
+type Props = { entry: CollectionEntry<'events'> };
+export async function getStaticPaths() {
+  const entries = await getCollection('events');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary} image={entry.data.hero}>
+  <div class="article-breadcrumb container"><a href="/events/">活动记录</a><span aria-hidden="true">/</span><span>第二期新生见面会</span></div>
+  <section class="event-hero"><div class="container event-hero-grid"><div class="event-hero-copy"><span class="section-kicker light">2026.09.13 · 活动记录</span><h1>{entry.data.title}</h1><p>{entry.data.summary}</p><div class="event-hero-tags"><span>导师交流</span><span>学习分享</span><span>现场影像</span></div></div><div class="event-hero-photo"><img src={entry.data.hero} alt={entry.data.heroAlt} /></div></div></section>
+  <section class="article-intro section-pad"><div class="container article-narrow"><span class="section-kicker">活动回顾</span><div class="prose"><Content /></div></div></section>
+  <section class="agenda-section section-pad" id="agenda"><div class="container"><div class="section-heading"><div><span class="section-kicker">两小时的交流</span><h2>活动日程</h2></div><p>根据活动时刻表整理，时间为相对时间。</p></div><ol class="agenda-list">{meetingAgenda.map((item) => <li><time>{formatAgendaMinute(item.startMinute)}–{formatAgendaMinute(item.endMinute)}</time><div><h3>{item.title}</h3><p>{item.detail}</p></div><span class="agenda-dot" aria-hidden="true"></span></li>)}</ol></div></section>
+  <section class="gallery-section section-pad"><div class="container"><div class="section-heading"><div><span class="section-kicker">现场影像</span><h2>定格这一天</h2></div></div><div class="gallery-grid"><figure><img src="/images/meeting-room.webp" alt="新生见面会开始前的会场布置" loading="lazy" /><figcaption>会场准备</figcaption></figure><figure><img src="/images/meeting-talk.webp" alt="见面会上导师介绍研究方向" loading="lazy" /><figcaption>导师交流</figcaption></figure></div></div></section>
+  <section class="recordings-section section-pad" id="videos"><div class="container"><div class="section-heading"><div><span class="section-kicker">可重温的交流</span><h2>现场录像</h2></div><p>点击封面后开始加载录像；建议使用稳定网络观看。</p></div><div class="video-grid">{meetingVideos.map((video) => <VideoCard video={video} />)}</div><p class="recordings-note">录像为活动现场片段，未覆盖时刻表中的全部环节。原始 4K 素材未上传网站。</p></div></section>
+  <section class="more-section"><div class="container more-row"><div><span class="section-kicker light">继续探索</span><h2>从活动现场，回到学习之路。</h2></div><a class="button button-outline" href="/learn/">查看学习路线 <span aria-hidden="true">→</span></a></div></section>
+</BaseLayout>

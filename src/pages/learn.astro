@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { phases } from '../data/roadmap.mjs';
+---
+
+<BaseLayout title="学习路线" description="星程计划第二期学习路线：31 个 Stage，六个阶段，从 Python 与 AI 基础到 Agent 工程实践和方向探索。">
+  <section class="page-hero"><div class="container"><span class="section-kicker">LEARNING PATH</span><h1>学习路线</h1><p>从一段清晰的路径开始，再走出自己的方向。下方将原始 31 个 Stage 整理为 6 个便于浏览的阶段。</p></div></section>
+  <section class="section-pad"><div class="container"><div class="learn-intro"><strong>从基础到实践</strong><p>路线旨在帮助成员建立 Python、机器学习、大模型与 Agent 的知识框架。可按基础水平选择合适的起点，并结合项目实践持续复盘。</p><span>31 STAGES / 6 PHASES</span></div><div class="phase-list">{phases.map((phase) => <article class="phase-card"><div class="phase-rail"><span>{phase.number}</span><i aria-hidden="true"></i></div><div class="phase-content"><div class="phase-top"><h2>{phase.title}</h2><span>Stage {phase.stages[0]}–{phase.stages.at(-1)}</span></div><p>{phase.summary}</p><ul class="pill-list">{phase.focus.map((item) => <li>{item}</li>)}</ul></div></article>)}</div></div></section>
+  <section class="resource-section section-pad"><div class="container"><div class="section-heading"><div><span class="section-kicker">资源入口</span><h2>继续深入学习</h2></div></div><div class="resource-grid"><a href="https://docs.python.org/zh-cn/3/" target="_blank" rel="noopener noreferrer"><strong>Python 官方中文文档</strong><span>编程基础 ↗</span></a><a href="https://zh.d2l.ai/" target="_blank" rel="noopener noreferrer"><strong>《动手学深度学习》</strong><span>深度学习 ↗</span></a><a href="https://www.kaggle.com/competitions/xingcheng-2-summer" target="_blank" rel="noopener noreferrer"><strong>星程二期暑期打榜</strong><span>实践挑战 ↗</span></a><a href="https://github.com/xingcheng-plan/xingcheng-plan" target="_blank" rel="noopener noreferrer"><strong>成员资料库</strong><span>需要 GitHub 权限 ↗</span></a></div></div></section>
+</BaseLayout>

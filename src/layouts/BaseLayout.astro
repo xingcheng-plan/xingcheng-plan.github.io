@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { title, description, image = '/images/training-room-01.webp' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const socialImage = new URL(image, Astro.site).toString();
+const nav = [
+  { href: '/', label: '首页' },
+  { href: '/learn/', label: '学习路线' },
+  { href: '/events/', label: '活动记录' },
+  { href: '/about/', label: '关于星程' },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d3147" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title} · 星程计划</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳转到正文</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container nav-row">
+          <a class="brand" href="/" aria-label="星程计划，返回首页">
+            <span class="brand-mark" aria-hidden="true">✦</span>
+            <span class="brand-copy"><strong>星程计划</strong><small>XINGCHENG PLAN</small></span>
+          </a>
+          <nav aria-label="主导航">
+            <ul class="nav-links">
+              {nav.map((item) => <li><a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>{item.label}</a></li>)}
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <main id="main"><slot /></main>
+      <footer class="site-footer">
+        <div class="container footer-grid">
+          <div>
+            <div class="footer-brand"><span class="brand-mark" aria-hidden="true">✦</span><strong>星程计划</strong></div>
+            <p>保持好奇，动手实践，认真复盘。</p>
+          </div>
+          <div>
+            <strong>继续探索</strong>
+            <a href="/learn/">学习路线</a>
+            <a href="/events/">活动记录</a>
+          </div>
+          <div>
+            <strong>成员入口</strong>
+            <a href="https://github.com/xingcheng-plan/xingcheng-plan" target="_blank" rel="noopener noreferrer">项目资料库 <span class="muted">（需 GitHub 权限）</span></a>
+          </div>
+        </div>
+        <div class="container footer-bottom"><span>© {new Date().getFullYear()} 星程计划</span><span>面向学习与实践的开放窗口</span></div>
+      </footer>
+    </div>
+  </body>
+</html>

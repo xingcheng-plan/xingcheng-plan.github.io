@@ -1,0 +1,85 @@
+---
+import { describeVideo } from '../lib/video.mjs';
+
+interface Props {
+  video: {
+    id: string;
+    title: string;
+    description: string;
+    duration: string;
+    poster: string;
+    src: string;
+  };
+}
+
+const { video } = Astro.props;
+const source = describeVideo(video.src);
+const isHls = source.src?.endsWith('.m3u8') ?? false;
+---
+
+<article class="video-card">
+  <div class="video-frame">
+    {source.playable && isHls ? (
+      <div class="hls-player" data-hls-player data-source={source.src}>
+        <button class="video-poster-button" type="button" aria-label={`播放${video.title}`}>
+          <img src={video.poster} alt="" loading="lazy" />
+          <span class="play-symbol" aria-hidden="true">▶</span>
+          <span class="play-label">播放录像</span>
+        </button>
+        <video hidden controls playsinline preload="none" poster={video.poster} aria-label={video.title}></video>
+        <p class="video-error" hidden role="status">当前浏览器播放失败。可在支持 HLS 的播放器中打开下方源链接。</p>
+      </div>
+    ) : source.playable ? (
+      <video controls playsinline preload="metadata" poster={video.poster} aria-label={video.title}>
+        <source src={source.src} type="video/mp4" />
+        浏览器暂不支持此视频。请使用下方链接打开。
+      </video>
+    ) : (
+      <div class="video-pending"><span aria-hidden="true">◷</span><strong>录像整理中</strong><p>视频链接确认后将在这里播放。</p></div>
+    )}
+  </div>
+  <div class="video-meta">
+    <span class="eyebrow">{video.duration} · 现场影像</span>
+    <h3>{video.title}</h3>
+    <p>{video.description}</p>
+    {source.playable && <a href={source.src} target="_blank" rel="noopener noreferrer">{isHls ? '打开播放源链接 ↗' : '打开视频原链接 ↗'}</a>}
+  </div>
+</article>
+
+<script>
+  import Hls from 'hls.js';
+
+  for (const container of document.querySelectorAll<HTMLElement>('[data-hls-player]')) {
+    const button = container.querySelector<HTMLButtonElement>('button');
+    const video = container.querySelector<HTMLVideoElement>('video');
+    const error = container.querySelector<HTMLElement>('.video-error');
+    const src = container.dataset.source;
+    if (!button || !video || !error || !src) continue;
+
+    button.addEventListener('click', async () => {
+      button.hidden = true;
+      video.hidden = false;
+
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+      } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.ERROR, (_, data) => {
+          if (data.fatal) error.hidden = false;
+        });
+      } else {
+        error.hidden = false;
+        return;
+      }
+
+      video.addEventListener('error', () => { error.hidden = false; }, { once: true });
+      try {
+        await video.play();
+      } catch {
+        // Controls remain available when a browser delays playback.
+      }
+    });
+  }
+</script>
