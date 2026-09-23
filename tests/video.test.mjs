@@ -31,3 +31,10 @@ test('plays a locally hosted short clip from the site root', () => {
     src: '/videos/meeting-moment.mp4',
   });
 });
+
+test('accepts a local HLS playlist for the long recordings', () => {
+  assert.deepEqual(describeVideo('/stream/recording-one/index.m3u8'), {
+    playable: true,
+    src: '/stream/recording-one/index.m3u8',
+  });
+});
