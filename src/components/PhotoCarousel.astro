@@ -1,0 +1,118 @@
+---
+const photos = [
+  {
+    src: '/images/training-room-01.webp',
+    alt: '星程计划暑期集训现场，同学们在机房学习和实践',
+    caption: '学习 · 实践 · 交流',
+  },
+  {
+    src: '/images/training-room-02.webp',
+    alt: '星程计划暑期集训现场，同学们一起讨论和完成任务',
+    caption: '暑期集训 · 共同探索',
+  },
+  {
+    src: '/images/meeting-room.webp',
+    alt: '星程计划第二期新生见面会的活动会场',
+    caption: '新生见面会 · 再次出发',
+  },
+];
+---
+
+<section class="hero-visual carousel" role="region" aria-label="学生风采轮播" tabindex="0" data-carousel>
+  <div class="carousel-photo">
+    <img src={photos[0].src} alt={photos[0].alt} width="1200" height="800" fetchpriority="high" data-carousel-image />
+    <div class="carousel-arrows">
+      <button type="button" aria-label="上一张照片" data-carousel-prev>←</button>
+      <button type="button" aria-label="下一张照片" data-carousel-next>→</button>
+    </div>
+  </div>
+  <div class="visual-caption carousel-caption">
+    <span data-carousel-count>01 / 03</span>
+    <span data-carousel-caption>{photos[0].caption}</span>
+  </div>
+  <div class="carousel-footer">
+    <div class="carousel-dots" aria-label="选择照片">
+      {photos.map((_, index) => (
+        <button type="button" aria-label={`查看第 ${index + 1} 张照片`} aria-pressed={index === 0 ? 'true' : 'false'} data-carousel-dot={index}></button>
+      ))}
+    </div>
+    <button class="carousel-pause" type="button" aria-label="暂停自动轮播" aria-pressed="false" data-carousel-pause>Ⅱ</button>
+  </div>
+</section>
+
+<script>
+  const photos = [
+    { src: '/images/training-room-01.webp', alt: '星程计划暑期集训现场，同学们在机房学习和实践', caption: '学习 · 实践 · 交流' },
+    { src: '/images/training-room-02.webp', alt: '星程计划暑期集训现场，同学们一起讨论和完成任务', caption: '暑期集训 · 共同探索' },
+    { src: '/images/meeting-room.webp', alt: '星程计划第二期新生见面会的活动会场', caption: '新生见面会 · 再次出发' },
+  ];
+
+  for (const carousel of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const image = carousel.querySelector<HTMLImageElement>('[data-carousel-image]')!;
+    const count = carousel.querySelector<HTMLElement>('[data-carousel-count]')!;
+    const caption = carousel.querySelector<HTMLElement>('[data-carousel-caption]')!;
+    const pause = carousel.querySelector<HTMLButtonElement>('[data-carousel-pause]')!;
+    const dots = [...carousel.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]')];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let index = 0;
+    let timer: number | undefined;
+    let pausedByUser = false;
+    let touchStartX: number | undefined;
+
+    function show(nextIndex: number) {
+      index = (nextIndex + photos.length) % photos.length;
+      const photo = photos[index];
+      image.src = photo.src;
+      image.alt = photo.alt;
+      count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
+      caption.textContent = photo.caption;
+      dots.forEach((dot, dotIndex) => dot.setAttribute('aria-pressed', String(dotIndex === index)));
+    }
+
+    function stop() {
+      if (timer !== undefined) window.clearInterval(timer);
+      timer = undefined;
+    }
+
+    function start() {
+      stop();
+      if (pausedByUser || reducedMotion.matches || document.hidden || carousel.matches(':hover') || carousel.contains(document.activeElement)) return;
+      timer = window.setInterval(() => {
+        if (pausedByUser || reducedMotion.matches || document.hidden || carousel.matches(':hover') || carousel.contains(document.activeElement)) {
+          stop();
+          return;
+        }
+        show(index + 1);
+      }, 6000);
+    }
+
+    carousel.querySelector('[data-carousel-prev]')?.addEventListener('click', () => show(index - 1));
+    carousel.querySelector('[data-carousel-next]')?.addEventListener('click', () => show(index + 1));
+    dots.forEach((dot, dotIndex) => dot.addEventListener('click', () => show(dotIndex)));
+    pause.addEventListener('click', () => {
+      pausedByUser = !pausedByUser;
+      pause.setAttribute('aria-pressed', String(pausedByUser));
+      pause.setAttribute('aria-label', pausedByUser ? '继续自动轮播' : '暂停自动轮播');
+      pause.textContent = pausedByUser ? '▶' : 'Ⅱ';
+      start();
+    });
+    carousel.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') { event.preventDefault(); show(index + 1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); show(index - 1); }
+    });
+    carousel.addEventListener('touchstart', (event) => { touchStartX = event.changedTouches[0]?.screenX; }, { passive: true });
+    carousel.addEventListener('touchend', (event) => {
+      if (touchStartX === undefined) return;
+      const difference = touchStartX - (event.changedTouches[0]?.screenX ?? touchStartX);
+      if (Math.abs(difference) > 45) show(index + (difference > 0 ? 1 : -1));
+      touchStartX = undefined;
+    }, { passive: true });
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+    carousel.addEventListener('focusin', stop);
+    carousel.addEventListener('focusout', () => window.setTimeout(start, 0));
+    document.addEventListener('visibilitychange', start);
+    reducedMotion.addEventListener('change', start);
+    start();
+  }
+</script>
