@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --host",
+    "check": "astro check",
     "build": "astro build",
+    "build:verify": "npm run check && npm run build && npm test",
     "test": "node --test tests/*.test.mjs",
     "test:coverage": "node --experimental-test-coverage --test tests/*.test.mjs",
     "test:e2e": "playwright test"
@@ -15,6 +17,8 @@
     "hls.js": "^1.7.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.63.0"
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.63.0",
+    "typescript": "^6.0.3"
   }
 }

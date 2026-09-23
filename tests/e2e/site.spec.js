@@ -16,7 +16,12 @@ test('the meeting has a schedule and playable media', async ({ page }) => {
   await expect(page.locator('source[src="/videos/meeting-moment.mp4"]')).toHaveCount(1);
   await expect(page.locator('video[aria-label="见面会录像 · 第一段"]')).toBeHidden();
   await page.getByRole('button', { name: '播放见面会录像 · 第一段' }).click();
-  await expect(page.locator('video[aria-label="见面会录像 · 第一段"]')).toBeVisible();
+  const recording = page.locator('video[aria-label="见面会录像 · 第一段"]');
+  await expect(recording).toBeVisible();
+  await expect.poll(() => recording.evaluate((video) => video.readyState), { timeout: 20_000 }).toBeGreaterThan(1);
+  await recording.evaluate((video) => { video.currentTime = 600; });
+  await expect.poll(() => recording.evaluate((video) => video.currentTime), { timeout: 20_000 }).toBeGreaterThan(599);
+  await expect.poll(() => recording.evaluate((video) => video.readyState), { timeout: 20_000 }).toBeGreaterThan(1);
 });
 
 test('mobile pages fit the screen without horizontal scrolling', async ({ page }, testInfo) => {
