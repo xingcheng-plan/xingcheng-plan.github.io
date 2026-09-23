@@ -1,5 +1,19 @@
 import { expect, test } from '@playwright/test';
 
+test('homepage photos form an operable three-slide carousel', async ({ page }) => {
+  await page.goto('/');
+  const carousel = page.getByRole('region', { name: '学生风采轮播' });
+  const photo = carousel.locator('img');
+  await expect(photo).toHaveAttribute('src', '/images/training-room-01.webp');
+  await carousel.getByRole('button', { name: '下一张照片' }).click();
+  await expect(photo).toHaveAttribute('src', '/images/training-room-02.webp');
+  await expect(carousel.getByText('02 / 03')).toBeVisible();
+  await carousel.getByRole('button', { name: '上一张照片' }).click();
+  await expect(photo).toHaveAttribute('src', '/images/training-room-01.webp');
+  await carousel.getByRole('button', { name: '查看第 3 张照片' }).click();
+  await expect(photo).toHaveAttribute('src', '/images/meeting-room.webp');
+});
+
 test('members can move from the homepage to the learning path', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /从好奇出发/ })).toBeVisible();
