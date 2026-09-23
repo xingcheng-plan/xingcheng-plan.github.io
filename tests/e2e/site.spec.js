@@ -27,8 +27,7 @@ test('the meeting has a schedule and playable media', async ({ page }) => {
   await expect.poll(() => shortClip.evaluate((video) => video.readyState), { timeout: 10_000 }).toBeGreaterThan(1);
 });
 
-test('mobile pages fit the screen without horizontal scrolling', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile');
+test('pages fit the screen without horizontal scrolling', async ({ page }) => {
   for (const path of ['/', '/learn/', '/events/', '/events/2026-09-13-meeting/']) {
     await page.goto(path);
     const dimensions = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth }));
