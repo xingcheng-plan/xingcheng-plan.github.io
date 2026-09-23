@@ -17,7 +17,7 @@ export const meetingVideos = [
     description: '活动现场记录，约 38 分钟。',
     duration: '37:49',
     poster: '/images/meeting-talk.webp',
-    src: '',
+    src: '/stream/recording-one/index.m3u8',
   },
   {
     id: 'recording-two',
@@ -25,7 +25,7 @@ export const meetingVideos = [
     description: '活动现场记录，约 35 分钟。',
     duration: '35:01',
     poster: '/images/meeting-room.webp',
-    src: '',
+    src: '/stream/recording-two/index.m3u8',
   },
   {
     id: 'meeting-moment',

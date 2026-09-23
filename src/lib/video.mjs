@@ -7,6 +7,10 @@ export function describeVideo(value) {
     return { playable: true, src: value.trim() };
   }
 
+  if (/^\/stream\/[a-z0-9-]+\/index\.m3u8$/i.test(value.trim())) {
+    return { playable: true, src: value.trim() };
+  }
+
   try {
     const url = new URL(value.trim());
     if (url.protocol !== 'https:') {
