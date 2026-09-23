@@ -24,3 +24,10 @@ test('keeps signed query strings intact for direct links', () => {
     src: 'https://cdn.example.org/meeting.mp4?token=abc',
   });
 });
+
+test('plays a locally hosted short clip from the site root', () => {
+  assert.deepEqual(describeVideo('/videos/meeting-moment.mp4'), {
+    playable: true,
+    src: '/videos/meeting-moment.mp4',
+  });
+});
