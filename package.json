@@ -10,6 +10,6 @@
     "test:coverage": "node --experimental-test-coverage --test tests/*.test.mjs"
   },
   "dependencies": {
-    "astro": "^6.0.0"
+    "astro": "^7.3.3"
   }
 }
