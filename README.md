@@ -26,6 +26,7 @@ npm run test:e2e
 - 第二期见面会的日程和视频条目在 `src/data/meeting.mjs`。日程依据原始时刻表 PDF 整理，修改时请核对来源。
 - 学习路线六阶段在 `src/data/roadmap.mjs`，整理自原资料的 Stage 0–30。
 - 图片放在 `public/images/`。上传前压缩，并填写准确的替代文字。
+- 首页轮播依次展示见面会大合照、暑期集训、技术公益项目汇报与最佳技术奖。见面会导师照片仅在详情页图库中展示。新照片按主题放在 `public/images/technical-public-welfare/` 与 `public/images/team-life/`，五张照片均在“关于星程”的实践交流和团队生活中展示；原图另归档于主项目 `assets/photos/` 的同名分类目录。
 - 两段长录像在 `public/stream/`，为 720p H.264/AAC HLS 文件；短片在 `public/videos/`。播放器点击后才开始加载长录像。
 
 不要将原始 4K 视频、DJI `.LRF` 文件、录取名单、个人作业或内部服务器资料加入此公开仓库。

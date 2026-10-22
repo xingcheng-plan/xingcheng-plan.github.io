@@ -1,33 +1,19 @@
 ---
 const photos = [
-  {
-    src: '/images/training-room-01.webp',
-    alt: '星程计划暑期集训现场，同学们在机房学习和实践',
-    caption: '学习 · 实践 · 交流',
-  },
-  {
-    src: '/images/training-room-02.webp',
-    alt: '星程计划暑期集训现场，同学们一起讨论和完成任务',
-    caption: '暑期集训 · 共同探索',
-  },
-  {
-    src: '/images/meeting-room.webp',
-    alt: '星程计划第二期新生见面会的活动会场',
-    caption: '新生见面会 · 再次出发',
-  },
+  { src: '/images/meeting-group.jpg', alt: '星程计划师生在台阶上集体合影', caption: '相聚星程 · 一起出发' },
+  { src: '/images/training-room-02.webp', alt: '星程计划暑期集训，同学们在机房学习和完成项目任务', caption: '暑期集训 · 动手实践' },
+  { src: '/images/technical-public-welfare/presentation.png', alt: '技术公益活动现场，同学手持话筒进行项目汇报', caption: '技术公益 · 项目分享' },
+  { src: '/images/technical-public-welfare/technical-award.png', alt: '两位同学在活动现场展示 CCF 技术公益马拉松最佳技术奖展板', caption: '实践收获 · 获奖时刻' },
 ];
 ---
 
 <section class="hero-visual carousel" role="region" aria-label="学生风采轮播" tabindex="0" data-carousel>
   <div class="carousel-photo">
-    <img src={photos[0].src} alt={photos[0].alt} width="1200" height="800" fetchpriority="high" data-carousel-image />
-    <div class="carousel-arrows">
-      <button type="button" aria-label="上一张照片" data-carousel-prev>←</button>
-      <button type="button" aria-label="下一张照片" data-carousel-next>→</button>
-    </div>
+    <img src={photos[0].src} alt={photos[0].alt} width="1280" height="805" fetchpriority="high" data-carousel-image />
+
   </div>
   <div class="visual-caption carousel-caption">
-    <span data-carousel-count>01 / 03</span>
+    <span data-carousel-count>01 / 04</span>
     <span data-carousel-caption>{photos[0].caption}</span>
   </div>
   <div class="carousel-footer">
@@ -36,15 +22,20 @@ const photos = [
         <button type="button" aria-label={`查看第 ${index + 1} 张照片`} aria-pressed={index === 0 ? 'true' : 'false'} data-carousel-dot={index}></button>
       ))}
     </div>
+    <div class="carousel-arrows">
+      <button type="button" aria-label="上一张照片" data-carousel-prev>←</button>
+      <button type="button" aria-label="下一张照片" data-carousel-next>→</button>
+    </div>
     <button class="carousel-pause" type="button" aria-label="暂停自动轮播" aria-pressed="false" data-carousel-pause>Ⅱ</button>
   </div>
 </section>
 
 <script>
   const photos = [
-    { src: '/images/training-room-01.webp', alt: '星程计划暑期集训现场，同学们在机房学习和实践', caption: '学习 · 实践 · 交流' },
-    { src: '/images/training-room-02.webp', alt: '星程计划暑期集训现场，同学们一起讨论和完成任务', caption: '暑期集训 · 共同探索' },
-    { src: '/images/meeting-room.webp', alt: '星程计划第二期新生见面会的活动会场', caption: '新生见面会 · 再次出发' },
+    { src: '/images/meeting-group.jpg', alt: '星程计划师生在台阶上集体合影', caption: '相聚星程 · 一起出发' },
+    { src: '/images/training-room-02.webp', alt: '星程计划暑期集训，同学们在机房学习和完成项目任务', caption: '暑期集训 · 动手实践' },
+    { src: '/images/technical-public-welfare/presentation.png', alt: '技术公益活动现场，同学手持话筒进行项目汇报', caption: '技术公益 · 项目分享' },
+    { src: '/images/technical-public-welfare/technical-award.png', alt: '两位同学在活动现场展示 CCF 技术公益马拉松最佳技术奖展板', caption: '实践收获 · 获奖时刻' },
   ];
 
   for (const carousel of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
