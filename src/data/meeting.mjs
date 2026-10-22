@@ -27,14 +27,6 @@ export const meetingVideos = [
     poster: '/images/meeting-room.webp',
     src: '/stream/recording-two/index.m3u8',
   },
-  {
-    id: 'meeting-moment',
-    title: '现场短镜头',
-    description: '见面会现场的简短片段。',
-    duration: '00:01',
-    poster: '/images/meeting-room.webp',
-    src: '/videos/meeting-moment.mp4',
-  },
 ];
 
 export function formatAgendaMinute(minute) {

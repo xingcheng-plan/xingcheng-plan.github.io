@@ -26,9 +26,9 @@ test('keeps signed query strings intact for direct links', () => {
 });
 
 test('plays a locally hosted short clip from the site root', () => {
-  assert.deepEqual(describeVideo('/videos/meeting-moment.mp4'), {
+  assert.deepEqual(describeVideo('/videos/example.mp4'), {
     playable: true,
-    src: '/videos/meeting-moment.mp4',
+    src: '/videos/example.mp4',
   });
 });
 

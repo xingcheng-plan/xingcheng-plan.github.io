@@ -19,9 +19,10 @@ test('the learning page renders the six verified phases', async () => {
   assert.match(html, /方向探索/);
 });
 
-test('the meeting page includes its schedule and a playable short clip', async () => {
+test('the meeting page includes its schedule and both full recordings', async () => {
   const html = await page('events/2026-09-13-meeting/index.html');
   assert.match(html, /暑期打榜颁奖/);
-  assert.match(html, /src="\/videos\/meeting-moment.mp4"/);
+  assert.doesNotMatch(html, /meeting-moment|现场短镜头/);
+  assert.match(html, /\/stream\/recording-two\/index.m3u8/);
   assert.match(html, /\/stream\/recording-one\/index.m3u8/);
 });

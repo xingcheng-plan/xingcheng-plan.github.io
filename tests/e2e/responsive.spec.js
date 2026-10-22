@@ -70,7 +70,7 @@ test('the final chapter includes its photo, useful links and footer', async ({ p
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/#continue');
   const ending=page.getByRole('region',{name:'继续探索'});
-  await expect(ending.locator('img[src="/images/meeting-group.jpg"]')).toBeVisible();
+  await expect(ending.locator('img[src="/images/team-life/stage-performance.png"]')).toBeVisible();
   await expect(ending.getByRole('link',{name:/找到你的起点/})).toBeVisible();
   await expect(ending.getByRole('link',{name:/回看共同的足迹/})).toBeVisible();
   await expect(ending.getByRole('link',{name:/回到第一页/})).toBeVisible();

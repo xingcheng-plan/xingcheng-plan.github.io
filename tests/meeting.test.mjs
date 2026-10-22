@@ -10,11 +10,10 @@ test('the published agenda covers the full two-hour meeting without gaps', () =>
   }
 });
 
-test('the media list includes two recordings and the brief scene clip', () => {
+test('the media list includes only the two full recordings', () => {
   assert.deepEqual(meetingVideos.map((video) => video.id), [
     'recording-one',
     'recording-two',
-    'meeting-moment',
   ]);
 });
 
