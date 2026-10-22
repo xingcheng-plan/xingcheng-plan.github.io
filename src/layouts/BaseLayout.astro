@@ -5,9 +5,10 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  paged?: boolean;
 }
 
-const { title, description, image = '/images/training-room-01.webp' } = Astro.props;
+const { title, description, image = '/images/training-room-01.webp', paged = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const socialImage = new URL(image, Astro.site).toString();
 const nav = [
@@ -19,7 +20,7 @@ const nav = [
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" class:list={{ 'snap-home': paged }}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,7 +31,7 @@ const nav = [
     <meta property="og:description" content={description} />
     <meta property="og:image" content={socialImage} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/images/brand/lab-logo.png" type="image/png" />
     <title>{title} · 星程计划</title>
   </head>
   <body>
@@ -39,21 +40,22 @@ const nav = [
       <header class="site-header">
         <div class="container nav-row">
           <a class="brand" href="/" aria-label="星程计划，返回首页">
-            <span class="brand-mark" aria-hidden="true">✦</span>
+            <img class="lab-logo" src="/images/brand/lab-logo.png" alt="实验室标志" width="100" height="59" />
             <span class="brand-copy"><strong>星程计划</strong><small>XINGCHENG PLAN</small></span>
           </a>
-          <nav aria-label="主导航">
+          <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-nav-toggle>菜单 <span aria-hidden="true">☰</span></button>
+          <nav id="primary-nav" aria-label="主导航">
             <ul class="nav-links">
               {nav.map((item) => <li><a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>{item.label}</a></li>)}
             </ul>
           </nav>
         </div>
       </header>
-      <main id="main"><slot /></main>
-      <footer class="site-footer">
+      <main id="main" class:list={{ 'home-page': paged }}><slot /></main>
+      {!paged && <footer class="site-footer">
         <div class="container footer-grid">
           <div>
-            <div class="footer-brand"><span class="brand-mark" aria-hidden="true">✦</span><strong>星程计划</strong></div>
+            <div class="footer-brand"><img class="lab-logo" src="/images/brand/lab-logo.png" alt="实验室标志" width="100" height="59" /><strong>星程计划</strong></div>
             <p>保持好奇，动手实践，认真复盘。</p>
           </div>
           <div>
@@ -67,7 +69,30 @@ const nav = [
           </div>
         </div>
         <div class="container footer-bottom"><span>© {new Date().getFullYear()} 星程计划</span><span>面向学习与实践的开放窗口</span></div>
-      </footer>
+      </footer>}
     </div>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+      const header = document.querySelector<HTMLElement>('.site-header');
+      function closeMenu() {
+        toggle?.setAttribute('aria-expanded', 'false');
+        header?.removeAttribute('data-menu-open');
+      }
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        header?.toggleAttribute('data-menu-open', open);
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+          closeMenu(); toggle.focus();
+        }
+      });
+      document.addEventListener('click', (event) => {
+        if (event.target instanceof Node && !header?.contains(event.target)) closeMenu();
+      });
+      header?.querySelectorAll('nav a').forEach(link => link.addEventListener('click', closeMenu));
+      window.matchMedia('(min-width: 681px)').addEventListener('change', closeMenu);
+    </script>
   </body>
 </html>

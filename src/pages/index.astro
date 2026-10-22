@@ -4,8 +4,15 @@ import { phases } from '../data/roadmap.mjs';
 import PhotoCarousel from '../components/PhotoCarousel.astro';
 ---
 
-<BaseLayout title="首页" description="星程计划：从基础学习、暑期集训到科研实践，记录同学们的成长路径与活动现场。">
-  <section class="hero">
+<BaseLayout paged title="首页" description="星程计划：从基础学习、暑期集训到科研实践，记录同学们的成长路径与活动现场。">
+  <nav class="home-pagination" aria-label="首页板块导航">
+    <a href="#start" aria-label="第 1 屏：首页介绍"><span>01</span></a>
+    <a href="#explore" aria-label="第 2 屏：内容入口"><span>02</span></a>
+    <a href="#path" aria-label="第 3 屏：学习路径"><span>03</span></a>
+    <a href="#moments" aria-label="第 4 屏：近期活动"><span>04</span></a>
+    <a href="#continue" aria-label="第 5 屏：继续探索"><span>05</span></a>
+  </nav>
+  <section class="hero" id="start" aria-label="首页介绍">
     <div class="container hero-grid">
       <div class="hero-copy">
         <span class="section-kicker light"><span class="kicker-line"></span> EAGLE · 星程计划</span>
@@ -20,9 +27,10 @@ import PhotoCarousel from '../components/PhotoCarousel.astro';
       <PhotoCarousel />
     </div>
     <div class="hero-orbit" aria-hidden="true"></div>
+    <a class="section-next" href="#explore">向下探索 <span aria-hidden="true">↓</span></a>
   </section>
 
-  <section class="quick-section section-pad">
+  <section class="quick-section section-pad" id="explore" aria-label="内容入口">
     <div class="container">
       <div class="section-heading"><div><span class="section-kicker">从这里开始</span><h2>找到你需要的内容</h2></div><p>学习路径、活动回顾与成员资料，一目了然。</p></div>
       <div class="quick-grid">
@@ -33,7 +41,7 @@ import PhotoCarousel from '../components/PhotoCarousel.astro';
     </div>
   </section>
 
-  <section class="path-section section-pad">
+  <section class="path-section section-pad" id="path" aria-label="学习路径">
     <div class="container">
       <div class="section-heading"><div><span class="section-kicker">学习路径</span><h2>一步一步，走向自己的方向</h2></div><a class="text-link" href="/learn/">查看完整路线 <span aria-hidden="true">→</span></a></div>
       <div class="path-track">
@@ -43,12 +51,39 @@ import PhotoCarousel from '../components/PhotoCarousel.astro';
     </div>
   </section>
 
-  <section class="feature-section section-pad">
+  <section class="feature-section section-pad" id="moments" aria-label="近期活动">
     <div class="container feature-grid">
       <div class="feature-photo"><img src="/images/meeting-group.jpg" alt="星程计划第二期新生见面会师生集体合影" loading="lazy" /><span class="photo-tag">活动影像 / 2026.09.13</span></div>
       <div class="feature-copy"><span class="section-kicker">近期活动</span><h2>第二期新生见面会</h2><p>从暑期集训走向新的学习阶段。导师和同学们在现场介绍方向、分享收获，一起讨论之后的实践计划。</p><div class="feature-list"><span>导师交流</span><span>暑期打榜</span><span>学生分享</span></div><a class="button button-dark" href="/events/2026-09-13-meeting/">查看活动与录像 <span aria-hidden="true">↗</span></a></div>
     </div>
   </section>
 
-  <section class="closing-section"><div class="container closing-row"><div><span class="section-kicker light">星程计划</span><h2>把每一次尝试，<br />变成下一步的起点。</h2></div><a class="button button-outline" href="/about/">了解星程计划 <span aria-hidden="true">→</span></a></div></section>
+  <section class="closing-section" id="continue" aria-label="继续探索">
+    <div class="container closing-content">
+      <div class="closing-layout">
+        <div class="closing-copy"><span class="section-kicker light">下一程 · 一起出发</span><h2>把好奇带进实践，<br />把下一程交给自己。</h2><p>从一次集训、一场交流，到一个亲手完成的项目。和同行的人一起，把想探索的方向走得更远。</p><a class="text-link light-link" href="/about/">认识星程计划 <span aria-hidden="true">↗</span></a></div>
+        <figure class="closing-photo"><img src="/images/meeting-group.jpg" alt="星程计划师生在台阶上集体合影" width="1280" height="805" loading="lazy" /><figcaption>相聚星程，继续探索。</figcaption></figure>
+      </div>
+      <div class="closing-links">
+        <a href="/learn/"><span>01 / 开始学习</span><h3>找到你的起点 <span aria-hidden="true">↗</span></h3><p>六个阶段，从基础走向实践。</p></a>
+        <a href="/events/"><span>02 / 活动记录</span><h3>回看共同的足迹 <span aria-hidden="true">↗</span></h3><p>重温见面会、分享与交流。</p></a>
+        <a href="https://github.com/xingcheng-plan/xingcheng-plan" target="_blank" rel="noopener noreferrer"><span>03 / 成员资料</span><h3>继续项目探索 <span aria-hidden="true">↗</span></h3><p>学习材料与作业归档，需权限。</p></a>
+      </div>
+      <footer class="closing-footer"><div class="closing-brand"><img class="lab-logo" src="/images/brand/lab-logo.png" alt="实验室标志" width="100" height="59" /><span>© {new Date().getFullYear()} 星程计划</span></div><a href="#start">回到第一页 <span aria-hidden="true">↑</span></a></footer>
+    </div>
+  </section>
+  <script>
+    import '../lib/chapter-scroll';
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.home-pagination a')];
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        links.forEach(link => {
+          if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      }
+    }, { rootMargin: '-25% 0px -45% 0px' });
+    document.querySelectorAll('.home-page > section').forEach(section => observer.observe(section));
+  </script>
 </BaseLayout>
